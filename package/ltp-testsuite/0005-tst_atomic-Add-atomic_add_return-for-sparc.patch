@@ -1,0 +1,39 @@
+From 55fced31f84617ab2e550ae0661cff726361509a Mon Sep 17 00:00:00 2001
+From: Cyril Hrubis <chrubis@suse.cz>
+Date: Thu, 11 May 2017 10:06:30 +0200
+Subject: [PATCH] tst_atomic: Add atomic_add_return for sparc
+
+This bug was reported by Buildroot autobuilder service
+http://autobuild.buildroot.net/results/fa5/fa5072b35b9de0aa3dc7f4ef4dc654121f7ed992/build-end.log
+
+Tested-by: Petr Vorel <pvorel@suse.cz>
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+---
+ include/tst_atomic.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/include/tst_atomic.h b/include/tst_atomic.h
+index 799d7356b..fc596cd07 100644
+--- a/include/tst_atomic.h
++++ b/include/tst_atomic.h
+@@ -131,6 +131,18 @@ static inline int tst_atomic_add_return(int i, int *v)
+
+	return val;
+ }
++
++#elif defined(__sparc__)
++static inline int tst_atomic_add_return(int i, int *v)
++{
++	/* taken from include/asm-generic/atomic.h */
++	int ret;
++	__asm__ __volatile__("": : :"memory");
++	ret = (v = v + i);
++        __asm__ __volatile__("": : :"memory");
++	return ret;
++}
++
+ #else /* HAVE_SYNC_ADD_AND_FETCH == 1 */
+ # error Your compiler does not provide __sync_add_and_fetch and LTP\
+	implementation is missing for your architecture.
+--
+2.12.2
