@@ -64,11 +64,45 @@ LTP_TESTSUITE_CONF_ENV += \
 
 # Requires uClibc bessel support, normally not enabled
 ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-define LTP_TESTSUITE_REMOVE_UNSUPPORTED
+define LTP_TESTSUITE_REMOVE_UNSUPPORTED_UCLIBC
 	rm -rf $(@D)/testcases/misc/math/float/bessel/
 	rm -f $(@D)/testcases/misc/math/float/float_bessel.c
 endef
-LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED
+LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_UCLIBC
+else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+define LTP_TESTSUITE_REMOVE_UNSUPPORTED_MUSL
+	rm -rf $(@D)/testcases/kernel/pty/pty01.c
+	rm -rf $(@D)/testcases/kernel/pty/pty02.c
+	rm -rf $(@D)/testcases/kernel/pty/ptem01.c
+	rm -rf $(@D)/testcases/kernel/sched/process_stress/process.c
+	rm -rf $(@D)/testcases/kernel/syscalls/accept4/accept4_01.c
+	rm -rf $(@D)/testcases/kernel/syscalls/confstr/confstr01.c
+	rm -rf $(@D)/testcases/kernel/syscalls/fmtmsg/fmtmsg01.c
+	rm -rf $(@D)/testcases/kernel/syscalls/getcontext/getcontext01.c
+	rm -rf $(@D)/testcases/kernel/syscalls/getdents/getdents01.c
+	rm -rf $(@D)/testcases/kernel/syscalls/getdents/getdents02.c
+	rm -rf $(@D)/testcases/kernel/syscalls/ioctl/ioctl01.c
+	rm -rf $(@D)/testcases/kernel/syscalls/ioctl/ioctl02.c
+	rm -rf $(@D)/testcases/kernel/syscalls/rt_tgsigqueueinfo/rt_tgsigqueueinfo01.c
+	rm -rf $(@D)/testcases/kernel/syscalls/sched_getaffinity/sched_getaffinity01.c
+	rm -rf $(@D)/testcases/kernel/syscalls/timer_create/timer_create01.c
+	rm -rf $(@D)/testcases/kernel/syscalls/timer_create/timer_create03.c
+	rm -rf $(@D)/testcases/misc/crash/crash01.c
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcraw_create/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svctcp_create/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svctcp_create/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcudp_bufcreate/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcudp_create/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_svcudp_create/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_registerrpc/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_svc_register/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_svc_unregister/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_register/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_unregister/
+	rm -rf $(@D)/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/tirpc_auth_authdes_seccreate/
+	rm -rf $(@D)/utils/benchmark/ebizzy-0.3
+endef
+LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_MUSL
 endif
 
 # ldd command build system tries to build a shared library unconditionally.
