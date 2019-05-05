@@ -11,46 +11,36 @@
 # and IPv6 updates.
 # http://www.spinics.net/lists/netdev/msg279881.html
 
-IPUTILS_VERSION = s20180629
+IPUTILS_VERSION = s20190324
 IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
 IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause, BSD-4-Clause
 # Only includes a license file for BSD
 IPUTILS_LICENSE_FILES = ninfod/COPYING
 
-IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no\
-	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+IPUTILS_CONF_OPTS = -DBUILD_NINFOD=false
 
 ifeq ($(BR2_PACKAGE_LIBCAP),y)
-IPUTILS_MAKE_OPTS += USE_CAP=yes
+IPUTILS_CONF_OPTS += -DUSE_CAP=true
 IPUTILS_DEPENDENCIES += libcap
 else
-IPUTILS_MAKE_OPTS += USE_CAP=no
-endif
-
-ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-IPUTILS_MAKE_OPTS += USE_GCRYPT=yes
-IPUTILS_DEPENDENCIES += libgcrypt
-else
-IPUTILS_MAKE_OPTS += USE_GCRYPT=no
+IPUTILS_CONF_OPTS += -DUSE_CAP=false
 endif
 
 ifeq ($(BR2_PACKAGE_NETTLE),y)
-IPUTILS_MAKE_OPTS += USE_NETTLE=yes
+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=nettle
 IPUTILS_DEPENDENCIES += nettle
-else
-IPUTILS_MAKE_OPTS += USE_NETTLE=no
-endif
-
-ifeq ($(BR2_PACKAGE_OPENSSL),y)
-IPUTILS_MAKE_OPTS += USE_CRYPTO=yes
+else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=gcrypt
+IPUTILS_DEPENDENCIES += libgcrypt
+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=openssl
 IPUTILS_DEPENDENCIES += openssl
+else ifeq ($(BR2_PACKAGE_LINUX_HEADERS),y)
+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=kernel
+IPUTILS_DEPENDENCIES += linux-headers
 else
-IPUTILS_MAKE_OPTS += USE_CRYPTO=no
+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
 endif
-
-define IPUTILS_BUILD_CMDS
-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
-endef
 
 define IPUTILS_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 755 $(@D)/arping      $(TARGET_DIR)/sbin/arping
@@ -68,4 +58,4 @@ define IPUTILS_PERMISSIONS
 	/bin/traceroute6 f 4755 0 0 - - - - -
 endef
 
-$(eval $(generic-package))
+$(eval $(meson-package))
