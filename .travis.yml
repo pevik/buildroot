@@ -1,0 +1,8 @@
+script:
+    - sudo dpkg --add-architecture i386
+    - sudo apt update
+    - sudo apt install -y --no-install-recommends libc6:i386 libstdc++6:i386 and zlib1g:i386
+    - ./utils/test-pkg -p iproute2
+    - ret=$?
+    - for i in ~/br-test-pkg/*/logfile; do echo "=== $i ==="; cat $i; echo; done
+    - exit $ret
