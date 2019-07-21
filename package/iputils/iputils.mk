@@ -76,8 +76,11 @@ IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
 define IPUTILS_PERMISSIONS
 	/usr/sbin/arping      f 4755 0 0 - - - - -
 	/usr/bin/clockdiff    f 4755 0 0 - - - - -
+	|xattr cap_net_raw+p
 	/bin/ping             f 4755 0 0 - - - - -
+	|xattr cap_net_raw+p
 	/usr/bin/traceroute6  f 4755 0 0 - - - - -
+	|xattr cap_net_raw+p
 endef
 
 $(eval $(meson-package))
