@@ -73,11 +73,16 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
 
 # handle permissions ourselves
 IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
+MAYBE_SUID = $(if $(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),0,4)
+
 define IPUTILS_PERMISSIONS
-	/usr/sbin/arping      f 4755 0 0 - - - - -
-	/usr/bin/clockdiff    f 4755 0 0 - - - - -
-	/bin/ping             f 4755 0 0 - - - - -
-	/usr/bin/traceroute6  f 4755 0 0 - - - - -
+	/usr/sbin/arping      f $(MAYBE_SUID)755 0 0 - - - - -
+	/usr/bin/clockdiff    f $(MAYBE_SUID)755 0 0 - - - - -
+	|xattr cap_net_raw+p
+	/bin/ping             f $(MAYBE_SUID)755 0 0 - - - - -
+	|xattr cap_net_raw+p
+	/usr/bin/traceroute6  f $(MAYBE_SUID)755 0 0 - - - - -
+	|xattr cap_net_raw+p
 endef
 
 $(eval $(meson-package))
