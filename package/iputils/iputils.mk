@@ -75,9 +75,21 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
 IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
 define IPUTILS_PERMISSIONS
 	/usr/sbin/arping      f 4755 0 0 - - - - -
+ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
+	|xattr cap_net_raw+p
+endif
 	/usr/bin/clockdiff    f 4755 0 0 - - - - -
+ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
+	|xattr cap_net_raw+p
+endif
 	/bin/ping             f 4755 0 0 - - - - -
+ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
+	|xattr cap_net_raw+p
+endif
 	/usr/bin/traceroute6  f 4755 0 0 - - - - -
+ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
+	|xattr cap_net_raw+p
+endif
 endef
 
 $(eval $(meson-package))
