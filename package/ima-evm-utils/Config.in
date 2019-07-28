@@ -1,0 +1,13 @@
+config BR2_PACKAGE_IMA_EVM_UTILS
+	bool "ima-evm-utils"
+	#depends on BR2_USE_WCHAR
+	#depends on !BR2_STATIC_LIBS # uses dlfcn.h
+	#depends on BR2_TOOLCHAIN_HAS_THREADS
+	#depends on BR2_USE_MMU # libglib2
+	#depends on BR2_TOOLCHAIN_HAS_SYNC_4
+	select BR2_PACKAGE_OPENSSL
+	help
+	  Linux Integrity Measurement Architecture (IMA)
+	  Extended Verification Module (EVM) tools.
+
+	  https://sourceforge.net/p/linux-ima/wiki/Home/
