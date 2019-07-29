@@ -518,8 +518,9 @@ int main(int argc, char **argv)
 			if (bb_set_xattr(full_name, xattr) < 0)
 				bb_error_msg_and_die("can't set cap %s on file %s\n", xattr, full_name);
 #else
-			bb_error_msg_and_die("line %d not supported: '%s'\nDid you forget to enable "
-					     "BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES?\n",
+			bb_error_msg("line %d not supported: '%s'\nEnable "
+					     "BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES"
+						 "to get xattr support\n",
 					     linenum, line);
 #endif /* EXTENDED_ATTRIBUTES */
 			continue;
