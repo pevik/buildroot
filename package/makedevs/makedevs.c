@@ -493,6 +493,7 @@ int main(int argc, char **argv)
 		printf("table=<stdin>\n");
 	}
 
+	unsigned int xattr_warned = 0;
 	while ((line = bb_get_chomped_line_from_file(table))) {
 		char type;
 		unsigned int mode = 0755;
@@ -518,9 +519,7 @@ int main(int argc, char **argv)
 			if (bb_set_xattr(full_name, xattr) < 0)
 				bb_error_msg_and_die("can't set cap %s on file %s\n", xattr, full_name);
 #else
-			bb_error_msg_and_die("line %d not supported: '%s'\nDid you forget to enable "
-					     "BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES?\n",
-					     linenum, line);
+			xattr_warned++;
 #endif /* EXTENDED_ATTRIBUTES */
 			continue;
 		}
@@ -641,6 +640,13 @@ int main(int argc, char **argv)
 loop:
 		free(line);
 	}
+
+	if (xattr_warned)
+			bb_error_msg("%u lines with xattr configuration ignored, enable "
+				"BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES "
+				"to get xattr support\n",
+				xattr_warned);
+
 	fclose(table);
 
 	return ret;
