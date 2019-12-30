@@ -62,13 +62,18 @@ LTP_TESTSUITE_CONF_ENV += \
 	LIBS="$(LTP_TESTSUITE_LIBS)" \
 	SYSROOT="$(STAGING_DIR)"
 
+# libtirpc 1.2.5 has by default authdes disabled
+LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/tirpc_auth_authdes_create/ \
+	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/tirpc_auth_authdes_seccreate/
+
 # uclibc: bessel support normally not enabled
 ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+LTP_TESTSUITE_UNSUPPORTED_TEST_CASES += \
 	testcases/misc/math/float/bessel/ \
-	testcases/misc/math/float/float_bessel.c
+	testcases/misc/math/float/float_bessel.c \
 else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+LTP_TESTSUITE_UNSUPPORTED_TEST_CASES += \
 	testcases/kernel/pty/pty01.c \
 	testcases/kernel/pty/pty02.c \
 	testcases/kernel/pty/ptem01.c \
@@ -97,7 +102,6 @@ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
 	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_svc_unregister/ \
 	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_register/ \
 	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_regunreg_xprt_unregister/ \
-	testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/tirpc/tirpc_auth_authdes_seccreate/ \
 	utils/benchmark/ebizzy-0.3
 endif
 
