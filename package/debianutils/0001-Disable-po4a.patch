@@ -1,0 +1,25 @@
+From 7134952f97ad5afb208e270571afbfe12670cc14 Mon Sep 17 00:00:00 2001
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 25 Jul 2022 12:59:45 +0200
+Subject: [PATCH] Disable po4a
+
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 86ac499..7c61896 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -1,6 +1,6 @@
+ AUTOMAKE_OPTIONS = foreign
+ 
+-SUBDIRS = po4a
++# SUBDIRS = po4a
+ 
+ EXTRA_DIST = CHANGELOG CONTRIBUTING .gitlab-ci.yml
+ 
+-- 
+2.37.1
+
