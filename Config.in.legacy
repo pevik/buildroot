@@ -146,6 +146,30 @@ endif
 
 comment "Legacy options removed in 2022.11"
 
+config BR2_PACKAGE_IPUTILS_NINFOD
+	bool "iputils 20221126 removed ninfod"
+	select BR2_LEGACY
+	help
+	  iputils 20221126 removed ninfod.
+
+config BR2_PACKAGE_IPUTILS_RARPD
+	bool "iputils 20221126 removed rarpd"
+	select BR2_LEGACY
+	help
+	  iputils 20221126 removed rarpd.
+
+config BR2_PACKAGE_IPUTILS_RDISC
+	bool "iputils 20221126 removed rdisc"
+	select BR2_LEGACY
+	help
+	  iputils 20221126 removed rdisc.
+
+config BR2_PACKAGE_IPUTILS_RDISC_SERVER
+	bool "iputils 20221126 removed rdisc"
+	select BR2_LEGACY
+	help
+	  iputils 20221126 removed rdisc.
+
 config BR2_PACKAGE_LIBOPENSSL_ENABLE_RC5
 	bool "libopenssl rc5 was never enabled"
 	select BR2_LEGACY
