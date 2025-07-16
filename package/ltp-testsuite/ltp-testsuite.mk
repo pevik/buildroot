@@ -92,4 +92,7 @@ endef
 
 LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_TESTCASES
 
+# 0001-configure-Fix-build-on-kernel-6.14-headers.patch
+LTP_TESTSUITE_AUTORECONF = YES
+
 $(eval $(autotools-package))
