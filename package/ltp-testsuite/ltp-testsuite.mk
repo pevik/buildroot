@@ -4,9 +4,12 @@
 #
 ################################################################################
 
-LTP_TESTSUITE_VERSION = 20250530
-LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
-LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+LTP_TESTSUITE_VERSION = 9cd4a8ea49173ce9f2acbded9ec0f7c9bcf67d0b
+LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.gz
+LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp
+LTP_TESTSUITE_SITE_METHOD = git
+LTP_TESTSUITE_AUTORECONF = YES
+LTP_TESTSUITE_DEPENDENCIES += host-pkgconf
 
 LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
 LTP_TESTSUITE_LICENSE_FILES = COPYING
