@@ -1,0 +1,73 @@
+From d7f47f3beb7283779106e530a2bccb5a786436bd Mon Sep 17 00:00:00 2001
+From: Petr Vorel <pvorel@suse.cz>
+Date: Thu, 24 Jul 2025 19:43:41 +0200
+Subject: [PATCH 2/2] tlibio: Further cleanup of old unixes
+
+I also wonder if #else part of struct lio_info_type Lio_info1[]
+should be really defined for uclibc/uclibc-ng.
+
+Signed-off-by: Petr Vorel <pvorel@suse.cz>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ lib/tlibio.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/lib/tlibio.c b/lib/tlibio.c
+index fe87c65ea4..bc1172f0c6 100644
+--- a/lib/tlibio.c
++++ b/lib/tlibio.c
+@@ -111,7 +111,7 @@ struct lio_info_type Lio_info1[] = {
+ 	{"b", LIO_IO_ASYNC | LIO_WAIT_SIGPAUSE, "async i/o using pause"},
+ 	{"a", LIO_IO_ASYNC | LIO_WAIT_RECALL,
+ 	 "async i/o using recall/aio_suspend"},
+-#if defined(sgi) || (defined(__linux__) && !defined(__UCLIBC__))
++#ifndef __UCLIBC__
+ 	{"r",
+ 	 LIO_RANDOM | LIO_IO_TYPES | LIO_WAIT_TYPES,
+ 	 "random sync i/o types and wait methods"},
+@@ -162,7 +162,7 @@ char Lio_SysCall[PATH_MAX];	/* string containing last i/o system call */
+ 
+ static volatile int Received_signal = 0;	/* number of signals received */
+ static volatile int Rec_signal;
+-#if defined(sgi) || (defined(__linux__) && !defined(__UCLIBC__))
++#ifndef __UCLIBC__
+ static volatile int Received_callback = 0;	/* number of callbacks received */
+ static volatile int Rec_callback;
+ #endif
+@@ -402,7 +402,7 @@ static void lio_async_signal_handler(int sig)
+ 	return;
+ }
+ 
+-#if defined(sgi) || (defined(__linux__) && !defined(__UCLIBC__))
++#ifndef __UCLIBC__
+ /***********************************************************************
+  * This is an internal callback handler.
+  * If the handler is called, it will increment the Received_callback
+@@ -420,7 +420,7 @@ static void lio_async_callback_handler(union sigval sigval)
+ 
+ 	return;
+ }
+-#endif /* sgi */
++#endif
+ 
+ /***********************************************************************
+  * lio_random_methods
+@@ -1312,7 +1312,6 @@ int lio_read_buffer(int fd,	/* open file descriptor */
+ 	return ret;
+ }				/* end of lio_read_buffer */
+ 
+-#if !defined(__sun) && !defined(__hpux) && !defined(_AIX)
+ #ifndef __UCLIBC__
+ /***********************************************************************
+  * This function will check that async io was successful.
+@@ -1513,7 +1512,6 @@ int lio_wait4asyncio(int method, int fd, struct aiocb *aiocbp)
+ 
+ }				/* end of lio_wait4asyncio */
+ 
+-#endif
+ #endif
+ 
+ #if UNIT_TEST
+-- 
+2.50.1
+
